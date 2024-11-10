@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <assert.h>
 #include <strings.h>
 #include <stdlib.h>
 
@@ -8,6 +9,16 @@ char ** str_split(char * a_str, const char a_delim);
 int main () {
 	char * line = getALine();
 	char ** tokens = str_split(line, ' ');
+	char ** line_pointer = tokens;
+	while (*line_pointer != NULL) {
+		printf("%s", *line_pointer);
+		line_pointer++;
+	}
+	for (char **temp = tokens; *temp != NULL; temp++) {
+		free(*temp);
+	}
+	free(tokens);
+	free(line);
 }
 
 char * getALine(void) {
@@ -57,22 +68,21 @@ char** str_split(char * a_str, const char a_delim) {
 		}
 		tmp++;
 	}
-	count += last_white_space < (a_str + strlen(a_str -1));
+	count += last_white_space < (a_str + strlen(a_str) -1);
 	count++;
-
 	result = malloc(sizeof(char*) * count);
 	
 	if (result) {
 		size_t idx = 0;
-		char * token = strtok(a_str, a_delim);
+		char * token = strtok(a_str, &a_delim);
 
 		while (token) {
 			assert(idx < count);
 			*(result + idx++) = strdup(token);
-			token = strtok(0, delim);
+			token = strtok(0, &a_delim);
 		}
 		assert(idx == count - 1);
-		*(result + idx) = 0;
+		*(result + idx) = NULL;
 		}
 	return result;
 }
