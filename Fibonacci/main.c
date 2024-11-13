@@ -5,18 +5,21 @@
 
 char * getALine();
 char ** str_split(char * a_str, const char a_delim);
+int* split_numbers(char** tokens);
+int get_number_of_elements(char** elements);
 
 int main () {
 	char * line = getALine();
 	char ** tokens = str_split(line, ' ');
-	char ** line_pointer = tokens;
-	while (*line_pointer != NULL) {
-		printf("%s", *line_pointer);
-		line_pointer++;
-	}
+    int* nums = split_numbers(tokens);
+    int size_of_nums = get_number_of_elements(tokens);
+    for (int i = 0; i < size_of_nums; i++) {
+        printf("%d", nums[i]);
+    }
 	for (char **temp = tokens; *temp != NULL; temp++) {
 		free(*temp);
 	}
+    free(nums);
 	free(tokens);
 	free(line);
 }
@@ -87,3 +90,28 @@ char** str_split(char * a_str, const char a_delim) {
 	return result;
 }
 
+int get_number_of_elements(char** elements) {
+    if (elements == NULL) {
+        return 0;
+    }
+    int count = 0;
+    while (elements[count] != NULL) {
+        count++;
+    }
+    return count;
+}
+
+int* split_numbers(char** tokens) {
+    if (tokens == NULL) {
+        return 0;
+    }
+    int size_of_char_array = get_number_of_elements(tokens);
+    int* numbers_array = calloc(size_of_char_array, sizeof(int)); 
+    if (numbers_array == NULL) {
+        return NULL;
+    }
+    for (int i = 0; i < size_of_char_array; i++) {
+        numbers_array[i] = atoi(tokens[i]);
+    }           
+    return numbers_array;
+}

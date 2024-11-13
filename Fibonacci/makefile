@@ -1,17 +1,30 @@
+# Compiler and flags
 CC = gcc
-CCFLAG = -Wimplicit-function-declaration
+CFLAGS = -Wimplicit-function-declaration
+LDFLAGS = 
+TARGET = main
+OBJECTS = main.o
 
-all: main clearwithoutmain
+# Phony targets (not real files)
+.PHONY: all clean clean_obj
 
-main: main.o
-	@$(CC) main.o $(CCFLAG) -o main
-	@chmod +x main
+# Default target
+all: $(TARGET)
 
-main.o: main.c
-	@$(CC) -c $(CCFLAG) main.c
+# Linking stage (builds the final executable)
+$(TARGET): $(OBJECTS)
+	@$(CC) $(OBJECTS) $(LDFLAGS) -o $(TARGET)
+	@chmod +x $(TARGET)
 
-clear:
-	@rm -f main main.o
+# Compilation stage (creates .o files)
+%.o: %.c
+	@$(CC) -c $(CFLAGS) $< -o $@
 
-clearwithoutmain:
+# Clean up all build artifacts
+clean: 
+	@rm -f $(TARGET) $(OBJECTS)
+
+# Clean object files only (preserves executable)
+clean_obj:
+	@rm -f $(OBJECTS)
 	@rm -f main.o
