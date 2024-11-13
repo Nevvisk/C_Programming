@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <stdlib.h>
 
+int calculate_fibonacci(int num);
 char * getALine();
 char ** str_split(char * a_str, const char a_delim);
 int* split_numbers(char** tokens);
@@ -13,9 +14,7 @@ int main () {
 	char ** tokens = str_split(line, ' ');
     int* nums = split_numbers(tokens);
     int size_of_nums = get_number_of_elements(tokens);
-    for (int i = 0; i < size_of_nums; i++) {
-        printf("%d", nums[i]);
-    }
+    calculate_fibonacci(nums[0]);
 	for (char **temp = tokens; *temp != NULL; temp++) {
 		free(*temp);
 	}
@@ -115,3 +114,21 @@ int* split_numbers(char** tokens) {
     }           
     return numbers_array;
 }
+
+int calculate_fibonacci(int num) {
+    int t1 = 0;
+    int t2 = 1;
+    int count = 0;
+    int nextTerm = 0;
+
+    printf("Printing Fibonacci sequence until the %dth is reached: %d, %d, ", num, t1, t2);
+    nextTerm = t1 + t2;
+    while (count < num) {
+        printf("%d, ", nextTerm);
+        t1 = t2;
+        t2 = nextTerm;
+        nextTerm = t1 + t2;
+        count++;
+    }
+    return 0;
+}    
